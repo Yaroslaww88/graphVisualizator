@@ -8,12 +8,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class MainController implements Initializable {
 
     @FXML Pane mainPane;
     @FXML Pane editPane;
@@ -22,6 +24,11 @@ public class Controller implements Initializable {
 
     private Circle startCircle = null;
     private Circle endCircle = null;
+
+    /**
+     * All lines that shown on screen
+     */
+    ArrayList<UiLine> uiLines = new ArrayList<>();
 
     DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
             /**
@@ -62,7 +69,11 @@ public class Controller implements Initializable {
                                 } else {
                                     endCircle = circle;
 
-                                    /**ToDo add line*/
+                                    UiLine uiLine = new UiLine(startCircle, endCircle);
+                                    Line line = uiLine.getLine();
+
+                                    uiLines.add(uiLine);
+                                    editPane.getChildren().add(line);
 
                                     startCircle = null;
                                     endCircle = null;
