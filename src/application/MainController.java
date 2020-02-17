@@ -13,6 +13,7 @@ import javafx.scene.shape.Line;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -32,6 +33,7 @@ public class MainController implements Initializable {
      */
     ArrayList<UiLine> uiLines = new ArrayList<>();
     Graph graph = new Graph();
+    HashMap<Circle, Integer> map = new HashMap();
 
     DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
             /**
@@ -72,13 +74,20 @@ public class MainController implements Initializable {
                                 } else {
                                     endCircle = circle;
 
-                                    UiLine uiLine = new UiLine(startCircle, endCircle);
+                                    UiLine uiLine = new UiLine(
+                                            startCircle,
+                                            map.get(startCircle),
+                                            endCircle,
+                                            map.get(endCircle)
+                                    );
+
                                     Line line = uiLine.getLine();
 
                                     uiLines.add(uiLine);
                                     editPane.getChildren().add(line);
-                                    /*TODO add Model instead of directly communicate with Graph*/
-                                    /*GraphEdge edge = new GraphEdge()*/
+
+                                    GraphEdge edge = new GraphEdge(map.get(startCircle), map.get(endCircle), 0);
+                                    graph.addEdge(edge);
 
                                     startCircle = null;
                                     endCircle = null;
@@ -87,8 +96,8 @@ public class MainController implements Initializable {
                         }
                 ));
 
-                /*TODO add Model instead of directly communicate with Graph*/
                 graph.addVertex();
+                map.put(circle, graph.getNumberOfVertices()); /*TODO not sure about this method*/
                 editPane.getChildren().add(circle);
             }
     );

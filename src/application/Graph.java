@@ -24,14 +24,18 @@ public class Graph {
         numberOfVertices++;
     }
 
+    public Integer getNumberOfVertices() {
+        return this.numberOfVertices;
+    }
+
     public String toString() {
 
         String result = "";
 
-        result += ("Graph contain " + numberOfVertices + " vertices");
+        result += ("Graph contain " + numberOfVertices + " vertices: \n");
 
         for (GraphEdge edge : edges) {
-            result += edge.toString();
+            result += edge.toString() + "\n";
         }
 
         return result;
