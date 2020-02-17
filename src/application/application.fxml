@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -24,6 +25,7 @@
                     </toggleGroup>
                 </RadioButton>
                 <RadioButton fx:id="vertex" layoutX="1044.0" layoutY="744.0" mnemonicParsing="false" onAction="#radioSelect" prefHeight="30.0" prefWidth="123.0" text="Add vertex" toggleGroup="$toggle" />
+            <Label fx:id="consoleLabel" layoutX="900.0" layoutY="23.0" prefHeight="566.0" prefWidth="291.0" />
             </children></Pane>
     </children>
 </GridPane>

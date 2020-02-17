@@ -3,6 +3,7 @@ package application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -21,6 +22,7 @@ public class MainController implements Initializable {
     @FXML Pane editPane;
     @FXML RadioButton edge;
     @FXML RadioButton vertex;
+    @FXML Label consoleLabel;
 
     private Circle startCircle = null;
     private Circle endCircle = null;
@@ -29,6 +31,7 @@ public class MainController implements Initializable {
      * All lines that shown on screen
      */
     ArrayList<UiLine> uiLines = new ArrayList<>();
+    Graph graph = new Graph();
 
     DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
             /**
@@ -74,6 +77,8 @@ public class MainController implements Initializable {
 
                                     uiLines.add(uiLine);
                                     editPane.getChildren().add(line);
+                                    /*TODO add Model instead of directly communicate with Graph*/
+                                    /*GraphEdge edge = new GraphEdge()*/
 
                                     startCircle = null;
                                     endCircle = null;
@@ -82,9 +87,18 @@ public class MainController implements Initializable {
                         }
                 ));
 
+                /*TODO add Model instead of directly communicate with Graph*/
+                graph.addVertex();
                 editPane.getChildren().add(circle);
             }
     );
+
+    public void printToLabel() {
+
+        String graphString = graph.toString();
+
+        consoleLabel.setText(graphString);
+    }
 
     public void radioSelect(ActionEvent actionEvent) {
         if (vertex.isSelected()) {
