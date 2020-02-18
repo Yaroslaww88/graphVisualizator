@@ -21,8 +21,8 @@ class UiLine {
 
     public Line getLine() {
         Line line = new Line();
-        line.setStroke(rgb(200, 200, 200));
-        line.setStrokeWidth(10.0);
+        line.setStroke(rgb(0, 0, 0));
+        line.setStrokeWidth(5.0);
 
         StackPane start = startCircle.getPane();
 

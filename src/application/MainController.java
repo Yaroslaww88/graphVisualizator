@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -58,6 +59,7 @@ public class MainController implements Initializable {
                 graph.addVertex();
 
                 Text text = new Text(graph.getNumberOfVertices().toString());
+                text.setFont(Font.font(40));
 
                 stackCircle.setLayoutX(event.getX() - 25);
                 stackCircle.setLayoutY(event.getY() - 25);
