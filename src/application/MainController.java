@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 import java.net.URL;
 import java.util.*;
@@ -130,6 +131,17 @@ public class MainController implements Initializable {
     public void printToLabel() {
 
         String graphString = graph.toString();
+
+        graph.dfs(1);
+
+        graphString += "Dfs route: \n";
+        for (Pair<String, Pair<Integer, Integer>> element : graph.dfsRoute) {
+            if (element.getKey().equals("Vertex")) {
+                graphString += "Visited vertex: " + element.getValue().getKey() + " \n";
+            } else {
+                graphString += "Visited edge: " + element.getValue().getKey() + " -> " + element.getValue().getValue() + "\n";
+            }
+        }
 
         consoleLabel.setText(graphString);
     }
