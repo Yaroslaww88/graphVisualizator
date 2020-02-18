@@ -1,7 +1,11 @@
 package application;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+
+import java.util.Stack;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -10,9 +14,9 @@ class UiLine {
     private UiCircle startCircle;
     private UiCircle endCircle;
 
-    public UiLine(Circle startCircle, Integer startId, Circle endCircle, Integer endId) {
-        this.startCircle = new UiCircle(startCircle, startId);
-        this.endCircle = new UiCircle(endCircle, endId);
+    public UiLine(UiCircle startCircle, UiCircle endCircle) {
+        this.startCircle = startCircle;
+        this.endCircle = endCircle;
     }
 
     public Line getLine() {
@@ -20,11 +24,15 @@ class UiLine {
         line.setStroke(rgb(200, 200, 200));
         line.setStrokeWidth(10.0);
 
-        line.startXProperty().bind(startCircle.getCircle().centerXProperty());
-        line.startYProperty().bind(startCircle.getCircle().centerYProperty());
+        StackPane start = startCircle.getPane();
 
-        line.endXProperty().bind(endCircle.getCircle().centerXProperty());
-        line.endYProperty().bind(endCircle.getCircle().centerYProperty());
+        line.startXProperty().bind(start.layoutXProperty().add(25));
+        line.startYProperty().bind(start.layoutYProperty().add(25));
+
+        StackPane end = endCircle.getPane();
+
+        line.endXProperty().bind(end.layoutXProperty().add(25));
+        line.endYProperty().bind(end.layoutYProperty().add(25));
 
         return line;
     }
@@ -32,29 +40,19 @@ class UiLine {
 
 class UiCircle {
 
-    private Circle circle;
-    private Integer vertexId;
+    private Integer vertexId = -1;
+    private StackPane pane;
 
-    UiCircle() {
-        this.circle = null;
-        this.vertexId = -1;
-    }
-
-    UiCircle(Circle circle) {
-        this.circle = circle;
-        this.vertexId = -1;
-    }
-
-    UiCircle(Circle circle, Integer id) {
-        this.circle = circle;
+    UiCircle(StackPane pane, Integer id) {
         this.vertexId = id;
+        this.pane = pane;
     }
 
     public Integer getVertexId() {
         return this.vertexId;
     }
 
-    public Circle getCircle() {
-        return this.circle;
+    public StackPane getPane() {
+        return this.pane;
     }
 }

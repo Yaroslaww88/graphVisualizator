@@ -7,15 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainController implements Initializable {
 
@@ -25,15 +24,14 @@ public class MainController implements Initializable {
     @FXML RadioButton vertex;
     @FXML Label consoleLabel;
 
-    private Circle startCircle = null;
-    private Circle endCircle = null;
+    private UiCircle startCircle = null;
+    private UiCircle endCircle = null;
 
     /**
      * All lines that shown on screen
      */
-    ArrayList<UiLine> uiLines = new ArrayList<>();
     Graph graph = new Graph();
-    HashMap<Circle, Integer> map = new HashMap();
+    HashMap<StackPane, Integer> map = new HashMap();
 
     DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
             /**
@@ -44,22 +42,41 @@ public class MainController implements Initializable {
              * Clicking
              */
             event -> {
+
+                if (edge.isSelected()) {
+                    return;
+                }
+
                 Circle circle = new Circle();
-                circle.setCenterX(event.getX());
-                circle.setCenterY(event.getY());
                 circle.setRadius(30.0f);
 
                 final Random random = new Random();
                 circle.setFill(Color.rgb(random.nextInt(250), random.nextInt(250), random.nextInt(250)));
 
-                circle.addEventHandler(MouseEvent.ANY, new DragAndClickHandler(
+                StackPane stackCircle = new StackPane();
+
+                graph.addVertex();
+
+                Text text = new Text(graph.getNumberOfVertices().toString());
+
+                stackCircle.setLayoutX(event.getX() - 25);
+                stackCircle.setLayoutY(event.getY() - 25);
+
+                stackCircle.getChildren().addAll(circle, text);
+
+                /**
+                 *  Connect StackPane to corresponding VertexId
+                 */
+                map.put(stackCircle, graph.getNumberOfVertices());
+
+                stackCircle.addEventHandler(MouseEvent.ANY, new DragAndClickHandler(
                         /**
                          * Dragging (works only when we add vertexes)
                          */
                         circleEvent -> {
                             if (vertex.isSelected()) {
-                                circle.setCenterX(circleEvent.getX());
-                                circle.setCenterY(circleEvent.getY());
+                                stackCircle.setLayoutX(circleEvent.getSceneX() - 35);
+                                stackCircle.setLayoutY(circleEvent.getSceneY() - 35);
                             }
                         },
                         /**
@@ -70,35 +87,41 @@ public class MainController implements Initializable {
 
                             } else {
                                 if (startCircle == null) {
-                                    startCircle = circle;
+                                    /**
+                                     * Create new UiCircle with stackCircle (StackPane) and VertexId of stackCircle (get from map)
+                                     */
+                                    startCircle = new UiCircle(stackCircle, map.get(stackCircle));
                                 } else {
-                                    endCircle = circle;
+                                    /**
+                                     * Create new UiCircle with stackCircle (StackPane) and VertexId of stackCircle (get from map)
+                                     */
+                                    endCircle = new UiCircle(stackCircle, map.get(stackCircle));
+
+                                    UiCircle startUiCircle = startCircle;
+                                    UiCircle endUiCircle = endCircle;
 
                                     UiLine uiLine = new UiLine(
-                                            startCircle,
-                                            map.get(startCircle),
-                                            endCircle,
-                                            map.get(endCircle)
+                                            startUiCircle,
+                                            endUiCircle
                                     );
 
                                     Line line = uiLine.getLine();
 
-                                    uiLines.add(uiLine);
                                     editPane.getChildren().add(line);
 
-                                    GraphEdge edge = new GraphEdge(map.get(startCircle), map.get(endCircle), 0);
+                                    GraphEdge edge = new GraphEdge(startCircle.getVertexId(), endCircle.getVertexId(), 0);
                                     graph.addEdge(edge);
 
                                     startCircle = null;
                                     endCircle = null;
+
+                                    System.out.println(stackCircle.getLayoutX());
                                 }
                             }
                         }
                 ));
 
-                graph.addVertex();
-                map.put(circle, graph.getNumberOfVertices()); /*TODO not sure about this method*/
-                editPane.getChildren().add(circle);
+                editPane.getChildren().add(stackCircle);
             }
     );
 
@@ -111,15 +134,17 @@ public class MainController implements Initializable {
 
     public void radioSelect(ActionEvent actionEvent) {
         if (vertex.isSelected()) {
-            editPane.addEventHandler(MouseEvent.ANY, dragAndClickHandler);
+            //ToDo add dialog menu
+            //editPane.addEventHandler(MouseEvent.ANY, dragAndClickHandler);
         }
         if (edge.isSelected()) {
-            editPane.removeEventHandler(MouseEvent.ANY, dragAndClickHandler);
+            //ToDo add dialog menu
+            //editPane.removeEventHandler(MouseEvent.ANY, dragAndClickHandler);
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        editPane.addEventHandler(MouseEvent.ANY, dragAndClickHandler);
     }
 }
