@@ -26,124 +26,54 @@ public class MainController implements Initializable {
     @FXML RadioButton vertex;
     @FXML Label consoleLabel;
 
-    private UiCircle startCircle = null;
-    private UiCircle endCircle = null;
+    private GraphModel model;
 
-    /**
-     * All lines that shown on screen
-     */
-    Graph graph = new Graph();
-    HashMap<StackPane, Integer> map = new HashMap();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        GraphicService graphicService = new GraphicService(editPane);
+        GraphService graphService = new GraphService();
+        model = new GraphModel(graphicService, graphService);
 
-    DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
-            /**
-             * No dragging for editPane available
-             */
-            event -> {},
-            /**
-             * Clicking
-             */
-            event -> {
-
-                if (edge.isSelected()) {
-                    return;
-                }
-
-                Circle circle = new Circle();
-                circle.setRadius(30.0f);
-
-                final Random random = new Random();
-                circle.setFill(Color.rgb(random.nextInt(250), random.nextInt(250), random.nextInt(250)));
-
-                StackPane stackCircle = new StackPane();
-
-                graph.addVertex();
-
-                Text text = new Text(graph.getNumberOfVertices().toString());
-                text.setFont(Font.font(40));
-
-                stackCircle.setLayoutX(event.getX() - 25);
-                stackCircle.setLayoutY(event.getY() - 25);
-
-                stackCircle.getChildren().addAll(circle, text);
-
+        DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
                 /**
-                 *  Connect StackPane to corresponding VertexId
+                 * No dragging for editPane available
                  */
-                map.put(stackCircle, graph.getNumberOfVertices());
+                event -> {},
+                /**
+                 * Clicking
+                 */
+                event -> {
 
-                stackCircle.addEventHandler(MouseEvent.ANY, new DragAndClickHandler(
-                        /**
-                         * Dragging (works only when we add vertexes)
-                         */
-                        circleEvent -> {
-                            if (vertex.isSelected()) {
-                                stackCircle.setLayoutX(circleEvent.getSceneX() - 35);
-                                stackCircle.setLayoutY(circleEvent.getSceneY() - 35);
-                            }
-                        },
-                        /**
-                         * Clicking (works differently in edge and vertex mode)
-                         */
-                        circleEvent -> {
-                            if (vertex.isSelected()) {
+                    if (edge.isSelected()) {
+                        model.addEdge(event.getX(), event.getY());
+                    } else {
+                        model.addVertex(event.getX(), event.getY());
+                    }
+                }
+        );
 
-                            } else {
-                                if (startCircle == null) {
-                                    /**
-                                     * Create new UiCircle with stackCircle (StackPane) and VertexId of stackCircle (get from map)
-                                     */
-                                    startCircle = new UiCircle(stackCircle, map.get(stackCircle));
-                                } else {
-                                    /**
-                                     * Create new UiCircle with stackCircle (StackPane) and VertexId of stackCircle (get from map)
-                                     */
-                                    endCircle = new UiCircle(stackCircle, map.get(stackCircle));
+        editPane.addEventHandler(MouseEvent.ANY, dragAndClickHandler);
+    }
 
-                                    UiCircle startUiCircle = startCircle;
-                                    UiCircle endUiCircle = endCircle;
-
-                                    UiLine uiLine = new UiLine(
-                                            startUiCircle,
-                                            endUiCircle
-                                    );
-
-                                    Line line = uiLine.getLine();
-
-                                    editPane.getChildren().add(line);
-
-                                    GraphEdge edge = new GraphEdge(startCircle.getVertexId(), endCircle.getVertexId(), 0);
-                                    graph.addEdge(edge);
-
-                                    startCircle = null;
-                                    endCircle = null;
-
-                                    System.out.println(stackCircle.getLayoutX());
-                                }
-                            }
-                        }
-                ));
-
-                editPane.getChildren().add(stackCircle);
-            }
-    );
 
     public void printToLabel() {
 
-        String graphString = graph.toString();
+        model.runDfs();
 
-        graph.dfs(1);
-
-        graphString += "Dfs route: \n";
-        for (Pair<String, Pair<Integer, Integer>> element : graph.dfsRoute) {
-            if (element.getKey().equals("Vertex")) {
-                graphString += "Visited vertex: " + element.getValue().getKey() + " \n";
-            } else {
-                graphString += "Visited edge: " + element.getValue().getKey() + " -> " + element.getValue().getValue() + "\n";
-            }
-        }
-
-        consoleLabel.setText(graphString);
+//        String graphString = graph.toString();
+//
+//        graph.dfs(1);
+//
+//        graphString += "Dfs route: \n";
+//        for (Pair<String, Pair<Integer, Integer>> element : graph.dfsRoute) {
+//            if (element.getKey().equals("Vertex")) {
+//                graphString += "Visited vertex: " + element.getValue().getKey() + " \n";
+//            } else {
+//                graphString += "Visited edge: " + element.getValue().getKey() + " -> " + element.getValue().getValue() + "\n";
+//            }
+//        }
+//
+//        consoleLabel.setText(graphString);
     }
 
     public void radioSelect(ActionEvent actionEvent) {
@@ -155,10 +85,5 @@ public class MainController implements Initializable {
             //ToDo add dialog menu
             //editPane.removeEventHandler(MouseEvent.ANY, dragAndClickHandler);
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        editPane.addEventHandler(MouseEvent.ANY, dragAndClickHandler);
     }
 }
