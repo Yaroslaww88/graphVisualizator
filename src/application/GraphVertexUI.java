@@ -33,12 +33,14 @@ public class GraphVertexUI {
         circle.setRadius(RADIUS);
 
         final Random random = new Random();
-        circle.setFill(Color.rgb(random.nextInt(250), random.nextInt(250), random.nextInt(250)));
+//        circle.setFill(Color.rgb(random.nextInt(250), random.nextInt(250), random.nextInt(250)));
+        circle.setFill(Color.rgb(70, 70, 70));
 
         stackCircle = new StackPane();
 
         Text text = new Text(this.text);
         text.setFont(Font.font(40));
+        text.setFill(Color.rgb(255, 0, 0));
 
 //        stackCircle.setLayoutX(positionX);
 //        stackCircle.setLayoutY(positionY);

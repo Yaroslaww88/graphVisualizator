@@ -123,7 +123,7 @@ public class MainController implements Initializable {
     }
 
     public void calculateMaxFlow() {
-        graphService.runDfs();
+        graphService.runMaxFlow();
     }
 
     public void printToLabel(String text) {
