@@ -17,17 +17,18 @@
         <RowConstraints />
     </rowConstraints>
     <children>
-        <Pane fx:id="mainPane" prefHeight="900.0" prefWidth="1200.0" styleClass="application.css">
+        <Pane fx:id="mainPane" prefHeight="1080.0" prefWidth="1980.0" styleClass="application.css">
             <children>
-                <Pane fx:id="editPane" layoutX="31.0" layoutY="23.0" opacity="0.54" prefHeight="847.0" prefWidth="853.0" />
-                <RadioButton fx:id="edge" layoutX="986.0" layoutY="720.0" mnemonicParsing="false" onAction="#radioSelect" prefHeight="30.0" prefWidth="114.0" text="Add edge">
+                <Pane fx:id="editPane" layoutX="31.0" layoutY="23.0" opacity="0.54" prefHeight="1019.0" prefWidth="1647.0" />
+                <RadioButton fx:id="edge" layoutX="1734.0" layoutY="855.0" mnemonicParsing="false" onAction="#radioSelect" prefHeight="30.0" prefWidth="114.0" text="Add edge">
                     <toggleGroup>
                         <ToggleGroup fx:id="toggle" />
                     </toggleGroup>
                 </RadioButton>
-                <RadioButton fx:id="vertex" layoutX="986.0" layoutY="758.0" mnemonicParsing="false" onAction="#radioSelect" prefHeight="30.0" prefWidth="123.0" text="Add vertex" toggleGroup="$toggle" />
-            <Label fx:id="consoleLabel" layoutX="900.0" layoutY="23.0" prefHeight="566.0" prefWidth="291.0" />
-            <Button fx:id="printButton" layoutX="965.0" layoutY="638.0" mnemonicParsing="false" onAction="#printToLabel" prefHeight="53.0" prefWidth="165.0" text="Print graph" />
+                <RadioButton fx:id="vertex" layoutX="1734.0" layoutY="898.0" mnemonicParsing="false" onAction="#radioSelect" prefHeight="30.0" prefWidth="123.0" text="Add vertex" toggleGroup="$toggle" />
+            <Label fx:id="consoleLabel" layoutX="1645.0" layoutY="136.0" prefHeight="566.0" prefWidth="291.0" />
+            <Button fx:id="calculateMaxFlowButton" layoutX="1734.0" layoutY="809.0" mnemonicParsing="false" onAction="#calculateMaxFlow" text="Calculate max flow" />
+            
             </children></Pane>
     </children>
 </GridPane>

@@ -29,4 +29,8 @@ class GraphEdge {
     public int getWeight() {
         return weight;
     }
+
+    public void setWeight(int newWeight) { this.weight = newWeight; }
+
+    public int getId() { return id; }
 }

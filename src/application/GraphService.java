@@ -1,8 +1,10 @@
 package application;
 
+import javafx.application.Platform;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class GraphService {
@@ -43,6 +45,14 @@ public class GraphService {
         graph.get(from).add(new Pair<>(to, 0));
     }
 
+    public void updateEdgeWeight(int edgeID, int newValue) {
+        for (GraphEdge edge : edges) {
+            if (edge.getId() == edgeID) {
+                edge.setWeight(newValue);
+            }
+        }
+    }
+
     boolean[] used;
     public void runDfs() {
         used = new boolean[graph.size()];
@@ -59,17 +69,33 @@ public class GraphService {
 
     private void dfs(int v) {
         used[v] = true;
-        for (GraphVertex vertex : vertices) {
-            if (vertex.id == v) {
-                vertex.vertexUI.highlight();
-                break;
+        new Thread(new Runnable() {
+            @Override public void run() {
+                for (GraphVertex vertex : vertices) {
+                    if (vertex.id == v) {
+                        Platform.runLater(new Runnable() {
+                            @Override public void run() {
+                                vertex.vertexUI.highlight();
+                            }
+                        });
+                        break;
+                    }
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
+                System.out.println("passed: " + v);
+                for (Pair<Integer, Integer> to : graph.get(v)) {
+                    if (!used[to.getKey()])
+                        dfs(to.getKey());
+                }
             }
-        }
-        wait(1000);
-        System.out.println("passed: " + v);
-        for (Pair<Integer, Integer> to : graph.get(v)) {
-            if (!used[to.getKey()])
-                dfs(to.getKey());
-        }
+        }).start();
+
+
     }
 }

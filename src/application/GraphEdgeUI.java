@@ -1,10 +1,13 @@
 package application;
 
 import javafx.scene.Group;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
+
+import java.awt.*;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -16,7 +19,9 @@ public class GraphEdgeUI {
     private double secondPositionX;
     private double secondPositionY;
 
-    private final double RADIUS = 30.0;
+    private final double RADIUS = 20.0;
+
+    private TextField textField;
 
     GraphEdgeUI(double firstPositionX, double firstPositionY,
                 double secondPositionX, double secondPositionY) {
@@ -71,21 +76,47 @@ public class GraphEdgeUI {
         //Create basic arrow
         arrowTriangle.getPoints().addAll(new Double[] {
                 0.0, 0.0,
-                40.0, 80.0,
-                80.0, 40.0
+                20.0, 40.0,
+                40.0, 20.0
         });
         arrowTriangle.setLayoutX(secondPositionX);
         arrowTriangle.setLayoutY(secondPositionY);
 
-        if (_firstPositionX > _secondPositionX) {
-            cos = (_firstPositionX - _secondPositionX) / hypotenuse;
+        double lineAngle = Math.round(Math.toDegrees(Math.acos(cos)));
+
+        System.out.println("a: " + firstPositionX + " " + firstPositionY + " " + secondPositionX + " " + secondPositionY);
+
+        if (firstPositionX <= secondPositionX && firstPositionY >= secondPositionY) {
+            double angle = 180 - 45 - lineAngle;
+            arrowTriangle.getTransforms().addAll(new Rotate(angle));
         }
-        double angle = Math.round(Math.toDegrees(Math.acos(cos)));
-        if (angle > 90)
-            angle = 90 - angle;
-        double angle1 = 180 - 45 - angle;
-        System.out.println(angle + " " + angle1);
-        arrowTriangle.getTransforms().addAll(new Rotate(angle1));
+
+        if (firstPositionX <= secondPositionX && firstPositionY <= secondPositionY) {
+            double angle = 0;
+            System.out.println("line angle: " + lineAngle);
+            if (lineAngle <= 45) {
+                angle = lineAngle + 135;
+            } else {
+                angle = 180 + lineAngle - 45;
+            }
+            arrowTriangle.getTransforms().addAll(new Rotate(angle));
+        }
+
+        if (firstPositionX >= secondPositionX && firstPositionY >= secondPositionY) {
+            double angle = 180 - 45 - lineAngle;
+            arrowTriangle.getTransforms().addAll(new Rotate(angle));
+        }
+
+        if (firstPositionX >= secondPositionX && firstPositionY <= secondPositionY) {
+            double angle = 0;
+            System.out.println("line angle: " + lineAngle);
+            if (lineAngle <= 45) {
+                angle = lineAngle + 135;
+            } else {
+                angle = 180 + lineAngle - 45;
+            }
+            arrowTriangle.getTransforms().addAll(new Rotate(angle));
+        }
 
 //        //Swap vecX and vecY because we rotate on 90 degree
 //        double vecY = (secondPositionX - firstPositionX) / hypotenuse * 30.0;
@@ -103,7 +134,16 @@ public class GraphEdgeUI {
 //        };
 //        arrowTriangle.getPoints().addAll(coords);
 
-        lineWithArrow.getChildren().addAll(line, arrowTriangle);
+        this.textField = new TextField();
+        this.textField.setLayoutX(secondPositionX);
+        this.textField.setLayoutY(secondPositionY);
+        this.textField.setMaxWidth(80);
+
+        lineWithArrow.getChildren().addAll(line, arrowTriangle, this.textField);
         return lineWithArrow;
+    }
+
+    public TextField getTextField() {
+        return this.textField;
     }
 }

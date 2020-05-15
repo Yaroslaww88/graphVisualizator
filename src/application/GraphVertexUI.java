@@ -1,5 +1,6 @@
 package application;
 
+import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -8,13 +9,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public class GraphVertexUI {
 
     private String text = "";
     private double positionX = 0;
     private double positionY = 0;
-    private final float RADIUS = 30f;
+    private final float RADIUS = 20f;
 
     StackPane stackCircle;
     Circle circle;
