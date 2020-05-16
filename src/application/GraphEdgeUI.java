@@ -136,11 +136,15 @@ public class GraphEdgeUI {
 //        arrowTriangle.getPoints().addAll(coords);
 
         this.textField = new TextField();
-        this.textField.setLayoutX(secondPositionX);
-        this.textField.setLayoutY(secondPositionY);
-        this.textField.setMaxWidth(80);
+        //Subtract RADIUS (to input not overflow vertex)
+        lambda = (_secondPositionX - _firstPositionX - RADIUS * cos) / (RADIUS * 4 * cos);
+        secondPositionX = (_firstPositionX + lambda * _secondPositionX) / (1.0 + lambda);
+        secondPositionY = (_firstPositionY + lambda * _secondPositionY) / (1.0 + lambda);
+        textField.setLayoutX(secondPositionX);
+        textField.setLayoutY(secondPositionY);
+        textField.setMaxWidth(40);
 
-        lineWithArrow.getChildren().addAll(line, arrowTriangle, this.textField);
+        lineWithArrow.getChildren().addAll(line, arrowTriangle, textField);
         return lineWithArrow;
     }
 
