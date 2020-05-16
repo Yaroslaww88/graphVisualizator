@@ -7,6 +7,7 @@ import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GraphicService {
 
@@ -21,11 +22,7 @@ public class GraphicService {
     }
 
     /**
-     *
      * @param vertexId id of vertexUI (to find it later)
-     * @param label
-     * @param positionX
-     * @param positionY
      * @return GraphVertexUI
      */
     public GraphVertexUI addGraphVertexUI(int vertexId, String label, double positionX, double positionY) {
@@ -41,10 +38,6 @@ public class GraphicService {
     /**
      * Add edge with given coords and label to Pane
      * @param edgeId id of edgeId (to find it later)
-     * @param firstPositionX
-     * @param firstPositionY
-     * @param secondPositionX
-     * @param secondPositionY
      * @return GraphEdgeUI
      */
     public GraphEdgeUI addGraphEdgeUI(int edgeId, double firstPositionX, double firstPositionY,
@@ -62,8 +55,6 @@ public class GraphicService {
 
     /**
      * Check if some vertexUI on given coordinates
-     * @param positionX
-     * @param positionY
      * @return boolean
      */
     public boolean isVertexOnCoordinates(double positionX, double positionY) {

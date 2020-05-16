@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.TextField?>
 <GridPane alignment="center" hgap="10" styleClass="sample.css" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
     <columnConstraints>
         <ColumnConstraints />
@@ -26,8 +27,14 @@
                     </toggleGroup>
                 </RadioButton>
                 <RadioButton fx:id="vertex" layoutX="1734.0" layoutY="898.0" mnemonicParsing="false" onAction="#radioSelect" prefHeight="30.0" prefWidth="123.0" text="Add vertex" toggleGroup="$toggle" />
-            <Label fx:id="consoleLabel" layoutX="1645.0" layoutY="136.0" prefHeight="566.0" prefWidth="291.0" />
-            <Button fx:id="calculateMaxFlowButton" layoutX="1734.0" layoutY="809.0" mnemonicParsing="false" onAction="#calculateMaxFlow" text="Calculate max flow" />
+            <Label fx:id="consoleLabel" layoutX="1661.0" layoutY="23.0" prefHeight="566.0" prefWidth="291.0" />
+            <Button fx:id="calculateMaxFlowButton" layoutX="1688.0" layoutY="685.0" mnemonicParsing="false" onAction="#calculateMaxFlow" prefHeight="0.0" prefWidth="238.0" text="Calculate max flow" />
+            <TextField fx:id="sourceInputField" layoutX="1774.0" layoutY="605.0" />
+            <TextField fx:id="sinkInputField" layoutX="1774.0" layoutY="645.0" />
+            <Label layoutX="1678.0" layoutY="605.0" prefHeight="25.0" prefWidth="77.0" text="Source" />
+            <Label layoutX="1678.0" layoutY="645.0" prefHeight="25.0" prefWidth="77.0" text="Sink" />
+            <Button fx:id="calculateMinFlowButton" layoutX="1688.0" layoutY="725.0" mnemonicParsing="false" onAction="#calculateMinFlow" prefHeight="0.0" prefWidth="238.0" text="Calculate min flow" />
+            <Button fx:id="resetGraphButton" layoutX="1688.0" layoutY="764.0" mnemonicParsing="false" onAction="#resetGraph" prefHeight="0.0" prefWidth="238.0" text="Reset graph" />
             
             </children></Pane>
     </children>

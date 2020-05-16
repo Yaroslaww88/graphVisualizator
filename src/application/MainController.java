@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,8 +21,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
+import javax.swing.event.ChangeListener;
 import java.net.URL;
 import java.util.*;
+
+import static java.lang.System.exit;
 
 public class MainController implements Initializable {
 
@@ -30,7 +34,12 @@ public class MainController implements Initializable {
     @FXML RadioButton edge;
     @FXML RadioButton vertex;
     @FXML Label consoleLabel;
+    @FXML TextField sourceInputField;
+    @FXML TextField sinkInputField;
+
     @FXML Button calculateMaxFlowButton;
+    @FXML Button calculateMinFlowButton;
+    @FXML Button resetGraphButton;
 
     private double firstPositionX = -1;
     private double firstPositionY = -1;
@@ -44,7 +53,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         graphicService = new GraphicService(editPane);
-        graphService = new GraphService();
+        graphService = new GraphService(graphicService);
 
         DragAndClickHandler dragAndClickHandler = new DragAndClickHandler(
                 /**
@@ -91,15 +100,26 @@ public class MainController implements Initializable {
                                     secondVertexUI.getCenterX(), secondVertexUI.getCenterY());
 
                             //Set listener to input weight
-                            TextField inputWeight = edgeUI.getTextField();
-                            inputWeight.textProperty().addListener((observable, oldValue, newValue) -> {
-                                int newValueInt = Integer.parseInt(newValue);
-                                graphService.updateEdgeWeight(edgeId, newValueInt);
+//                            TextField inputWeight = ;
+                            edgeUI.getTextField().textProperty().addListener((observable, oldValue, newValue) -> {
+                                try {
+                                    int newValueInt = Integer.parseInt(newValue);
+                                    graphService.updateEdgeWeightById(edgeId, newValueInt);
+                                } catch (NumberFormatException ex) {
+                                    //we get exception here because we have not-int value like "*int* / *int*"
+                                }
                             });
 
                             firstPositionX = firstPositionY = secondPositionX = secondPositionY = -1;
 
-                            graphService.addEdge(new GraphEdge(edgeId, firstVertexId, secondVertexId, 1, edgeUI));
+                            try {
+                                GraphVertex firstVertex = graphService.getGraphVertexById(firstVertexId);
+                                GraphVertex secondVertex = graphService.getGraphVertexById(secondVertexId);
+                                graphService.addEdge(new GraphEdge(edgeId, firstVertex, secondVertex, 1, edgeUI));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                exit(1);
+                            }
 
                             this.printToLabel("Edge " + edgeId + " selected");
                         }
@@ -123,7 +143,18 @@ public class MainController implements Initializable {
     }
 
     public void calculateMaxFlow() {
-        graphService.runMaxFlow();
+        int source = Integer.parseInt(this.sourceInputField.getText());
+        int sink = Integer.parseInt(this.sinkInputField.getText());
+        graphService.runMaxFlow(source, sink);
+//        graphicService.unlockEdgesInputs();
+    }
+
+    public void calculateMinFlow() {
+
+    }
+
+    public void resetGraph() {
+        graphService.resetGraph();
     }
 
     public void printToLabel(String text) {

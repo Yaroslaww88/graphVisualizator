@@ -8,6 +8,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -145,5 +146,17 @@ public class GraphEdgeUI {
 
     public TextField getTextField() {
         return this.textField;
+    }
+
+    public void lockWeightInputField() {
+        this.textField.setEditable(false);
+    }
+
+    public void unlockWeightInputField() {
+        this.textField.setEditable(true);
+    }
+
+    public void setText(String text) {
+        this.textField.setText(text);
     }
 }

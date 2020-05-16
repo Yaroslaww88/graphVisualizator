@@ -1,15 +1,18 @@
 package application;
 
+import java.util.ArrayList;
+
 class GraphEdge {
 
     private int id;
     GraphEdgeUI edgeUI;
 
-    private int to;
-    private int from;
+    private GraphVertex to;
+    private GraphVertex from;
     private int weight;
+    private boolean blocked = false;
 
-    public GraphEdge(int id, int from, int to, int weight, GraphEdgeUI edgeUI) {
+    public GraphEdge(int id, GraphVertex from, GraphVertex to, int weight, GraphEdgeUI edgeUI) {
         this.id = id;
         this.edgeUI = edgeUI;
 
@@ -19,18 +22,31 @@ class GraphEdge {
     }
 
     public int getTo() {
-        return to;
+        return to.id;
     }
 
     public int getFrom() {
-        return from;
+        return from.id;
     }
 
     public int getWeight() {
         return weight;
     }
 
-    public void setWeight(int newWeight) { this.weight = newWeight; }
+    public void lockChanges() {
+        this.blocked = true;
+        this.edgeUI.lockWeightInputField();
+    }
+
+    public void unlockChanges() {
+        this.blocked = false;
+        this.edgeUI.unlockWeightInputField();
+    }
+
+    public void setWeight(int newWeight) {
+        if (!blocked)
+            this.weight = newWeight;
+    }
 
     public int getId() { return id; }
 }
